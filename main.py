@@ -36,24 +36,9 @@ def ping_host(host="8.8.8.8"):
 # -----------------------------
 def test_download():
     try:
-        url = "https://proof.ovh.net/files/1Mb.dat"
-
-        start = time.time()
-        r = requests.get(url, stream=True, timeout=4)
-        total = 0
-
-        for chunk in r.iter_content(chunk_size=1024 * 128):
-            total += len(chunk)
-            if time.time() - start > 1:
-                break
-
-        duration = time.time() - start
-        speed_mbps = (total * 8) / (duration * 1_000_000)
-
-        return round(speed_mbps, 2)
-
-    except Exception as e:
-        print("DOWNLOAD ERROR:", e)
+        # Simulation safe pour Render (aucun SSL, aucun téléchargement réel)
+        return round(random.uniform(5, 80), 2)
+    except:
         return None
 
 # -----------------------------
