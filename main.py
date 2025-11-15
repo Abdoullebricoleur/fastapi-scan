@@ -35,20 +35,26 @@ def ping_host(host="8.8.8.8"):
 # 2) Test download (réel mais léger)
 # -----------------------------
 def test_download():
-    url = "https://speed.hetzner.de/100MB.bin"  # fichier stable
-    start = time.time()
-    r = requests.get(url, stream=True)
-    size = 0
-    chunk = 1024 * 64
+    try:
+        url = "https://proof.ovh.net/files/1Mb.dat"
 
-    for data in r.iter_content(chunk_size=chunk):
-        size += len(data)
-        if time.time() - start > 1:  # on limite à 1 seconde
-            break
+        start = time.time()
+        r = requests.get(url, stream=True, timeout=4)
+        total = 0
 
-    duration = time.time() - start
-    speed_mbps = (size * 8) / (duration * 1_000_000)
-    return speed_mbps
+        for chunk in r.iter_content(chunk_size=1024 * 128):
+            total += len(chunk)
+            if time.time() - start > 1:
+                break
+
+        duration = time.time() - start
+        speed_mbps = (total * 8) / (duration * 1_000_000)
+
+        return round(speed_mbps, 2)
+
+    except Exception as e:
+        print("DOWNLOAD ERROR:", e)
+        return None
 
 # -----------------------------
 # 3) API de scan complet
